@@ -15,4 +15,20 @@ cat_varname=c('ps_ind_02_cat','ps_ind_04_cat','ps_ind_05_cat','ps_ind_06_bin','p
               'ps_calc_20_bin')
 cat_index=match(cat_varname,colnames(feature))
 feature=as.matrix(feature)
-feature_impute=knn.impute(feature,k=5,cat.var=cat_index,to.impute=1:nrow(feature),using=1:nrow(feature))
+#feature_impute=knn.impute(feature,k=5,cat.var=cat_index,to.impute=1:nrow(feature),using=1:nrow(feature))
+set.seed(867)
+new_index=sample(1:nrow(feature),nrow(feature),replace=F)
+feature_shuffle=feature[new_index,]
+id_target_shuffle=id_target[new_index,]
+feature_impute=c()
+N=50000
+m=0
+while (m<nrow(feature)){
+  data=feature_shuffle[(m+1):min(m+N,nrow(feature)),]
+  m=m+N
+  temp=knn.impute(data,k=5,cat.var=cat_index,to.impute=1:nrow(data),using=1:nrow(data))
+  feature_impute=rbind(feature_impute,temp)
+}
+trainset_impute=cbind(id_target_shuffle,feature_impute)
+write.csv(trainset_impute,'trainset_impute.csv',row.names = F)
+
