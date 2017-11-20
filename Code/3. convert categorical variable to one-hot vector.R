@@ -94,3 +94,35 @@ for (i in 1:length(cat_varname)){
 }
 colnames(data)[1]='id'
 write.csv(data,"testset_impute_onehot.csv",row.names = F)
+
+############################################################
+train = read.csv("trainset_impute_onehot.csv",header=T)
+############################################################
+cont_inter_name=c("ps_calc_05","ps_calc_06","ps_calc_07","ps_calc_08","ps_calc_09","ps_calc_10",
+             "ps_calc_11","ps_calc_12","ps_calc_13","ps_calc_14","ps_car_13","ps_reg_01",
+             "ps_reg_02","ps_reg_03")
+cont_inter_var=c()
+for(i in 1:(length(cont_inter_name)-1)){
+  for(j in (i+1):length(cont_inter_name)){
+    a=train[,cont_inter_name[i]]
+    b=train[,cont_inter_name[j]]
+    d=c()
+    for (k in 1:length(a)){
+      d[k]=a[k]*b[k]
+    }
+    cont_inter_var=cbind(cont_inter_var,d)
+  }
+}
+
+std_inter = scale(cont_inter_var)
+std_inter = as.data.frame(cont_inter_var)
+cont_name = c("ps_ind_01","ps_ind_03","ps_ind_14","ps_ind_15","ps_reg_01","ps_reg_02",
+              "ps_reg_03","ps_car_11","ps_car_12","ps_car_13","ps_car_14","ps_car_15",
+              "ps_calc_01","ps_calc_02","ps_calc_03","ps_calc_04","ps_calc_05","ps_calc_06",
+              "ps_calc_07","ps_calc_08","ps_calc_09","ps_calc_10","ps_calc_11","ps_calc_12",
+              "ps_calc_13","ps_calc_14")
+for (i in 1:length(cont_name)){
+  train[,cont_name[i]]=scale(train[,cont_name[i]])
+}
+train=cbind(train,std_inter)
+write.csv(train,"trainset_1120.csv",row.names = F)
