@@ -30,8 +30,8 @@ for (i in 1:length(cat_varname)){
 }
 
 ## real data - trainset 
-setwd("~/GitHub/MIT6.867/Data")
-data = read.csv("trainset_impute50000.csv",header=T)
+setwd("C:/Users/Irina/Google Drive/Harvard classwork/MIT 6.867/Final project/Data")
+data = read.csv("1_Imputed/trainset_impute50000.csv",header=T)
 cat_varname=c('ps_ind_02_cat','ps_ind_04_cat','ps_ind_05_cat','ps_ind_06_bin','ps_ind_07_bin',
               'ps_ind_08_bin','ps_ind_09_bin','ps_ind_10_bin','ps_ind_11_bin','ps_ind_12_bin',
               'ps_ind_13_bin','ps_ind_16_bin','ps_ind_17_bin','ps_ind_18_bin','ps_car_01_cat',
@@ -111,6 +111,8 @@ for(i in 1:(length(cont_inter_name)-1)){
       d[k]=a[k]*b[k]
     }
     cont_inter_var=cbind(cont_inter_var,d)
+    t=ncol(cont_inter_var)
+    colnames(cont_inter_var)[t] = paste0(cont_inter_name[i],'*',cont_inter_name[j])
   }
 }
 
