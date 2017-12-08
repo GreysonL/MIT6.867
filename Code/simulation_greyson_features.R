@@ -61,19 +61,35 @@ for(i in 1:(length(cont_vars)-1)){
   }
 }
 
-
-
-data=cbind(Y,X_withextra) #1 Y, 2:18 X's, 19:48 extra covars
-write.csv(data,"C:/Users/Irina/Google Drive/Harvard classwork/MIT 6.867/Final project/Data/2_Cleaned/sim_int_features.csv",row.names = F)
+# Save
+data=cbind(Y,X) #1 Y, 2:18 X's
+data_extra=cbind(Y,X_withextra) #1 Y, 2:18 X's, 19:48 extra covars
+write.csv(data,"C:/Users/Irina/Google Drive/Harvard classwork/MIT 6.867/Final project/Data/Simulation/sim_int_truefeatures.csv",row.names = F)
+write.csv(data_extra,"C:/Users/Irina/Google Drive/Harvard classwork/MIT 6.867/Final project/Data/Simulation/sim_int_withextrafeatures.csv",row.names = F)
 
 
 ######################################################################################################
 ## Simulated data 2
 ######################################################################################################
+## Generate additional features
+x1divx2 = x1/x2
+x3sq = x3^2
+complex = x1divx2*x3sq
+
 ## assume a non-linear combination of x1,x2,x3,x4, which indcludes interactions, powers, and ratios
-X2=cbind(x1,x2,x3,x4_hot,inter1,inter2,x5,x6_hot)
-beta2=c(0.1,-0.1,0.1,-0.1,0.1,-0.1,0.1,2,0.5,1,1.5,2)
-eta2=-0.5+X[,1:12]%*%beta+rnorm(N,mean=0,sd=1)
-p2=exp(eta)/(1+exp(eta))
+X1=cbind(x1,x2,x3,x4_hot,inter1,inter2,x5,x6_hot)
+beta1=c(0.1,-0.1,0.1,-0.1,0.1,-0.1,0.1,2,0.5,1,1.5,2)
+
+X2=cbind(x1,x2,x3,x4_hot,inter1,inter2,x1divx2,x3sq,complex,x5,x6_hot)
+beta2=c(0.02,-0.01,0.02,-0.015,0.01,-0.02,0.01,0.2,0.05,0.1,0.15, 0.2,0.00001,0.2,0.00003)
+eta2=-0.5+(X1[,1:12]%*%beta1)*(X2[,1:15]%*%beta2)+rnorm(N,mean=0,sd=1) # X5 and X6_hot irrelevant
+p2=exp(eta2)/(1+exp(eta2))
 mean(p2)
-Y2=as.numeric(p>0.5)
+Y2=as.numeric(p2>0.5)
+
+# Save
+data2=cbind(Y2,X2) #1 Y, 2:18 X's
+data2_extra=cbind(Y2,X_withextra) 
+write.csv(data2,"C:/Users/Irina/Google Drive/Harvard classwork/MIT 6.867/Final project/Data/Simulation/sim_nonlinear_int_truefeatures.csv",row.names = F)
+write.csv(data2_extra,"C:/Users/Irina/Google Drive/Harvard classwork/MIT 6.867/Final project/Data/Simulation/sim_nonlinear_int_withextrafeatures.csv",row.names = F)
+
