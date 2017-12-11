@@ -30,26 +30,26 @@ for (i in 1:length(cat_varname)){
 }
 
 ## real data - trainset 
-setwd("C:/Users/Irina/Google Drive/Harvard classwork/MIT 6.867/Final project/Data/1_Imputed")
-data = read.csv("1_Imputed/trainset_impute50000.csv",header=T)
-cat_varname=c('ps_ind_02_cat','ps_ind_04_cat','ps_ind_05_cat','ps_ind_06_bin','ps_ind_07_bin',
+setwd("C:/Users/idegtiar/Google Drive/Harvard classwork/MIT 6.867/Final project/Data/1_Imputed/")
+data_train = read.csv("trainset_impute50000.csv",header=T)
+cat_varname_train=c('ps_ind_02_cat','ps_ind_04_cat','ps_ind_05_cat','ps_ind_06_bin','ps_ind_07_bin',
               'ps_ind_08_bin','ps_ind_09_bin','ps_ind_10_bin','ps_ind_11_bin','ps_ind_12_bin',
               'ps_ind_13_bin','ps_ind_16_bin','ps_ind_17_bin','ps_ind_18_bin','ps_car_01_cat',
               'ps_car_02_cat','ps_car_03_cat','ps_car_04_cat','ps_car_05_cat','ps_car_06_cat',
               'ps_car_07_cat','ps_car_08_cat','ps_car_09_cat','ps_car_10_cat','ps_car_11_cat',
               'ps_calc_15_bin','ps_calc_16_bin','ps_calc_17_bin','ps_calc_18_bin','ps_calc_19_bin',
               'ps_calc_20_bin')
-for (i in 1:length(cat_varname)){
+for (i in 1:length(cat_varname_train)){
   one_hot=c()
-  drop = cat_varname[i]
-  cat_var=data[,drop]
+  drop = cat_varname_train[i]
+  cat_var=data_train[,drop]
   cat_range=unique(cat_var)
   if (length(cat_range)==2){
-    data[cat_var==cat_range[1],drop]=1
-    data[cat_var==cat_range[2],drop]=-1
+    data_train[cat_var==cat_range[1],drop]=1
+    data_train[cat_var==cat_range[2],drop]=-1
   }
   else{
-    data=data[,!(names(data) %in% drop)]
+    data_train=data_train[,!(names(data_train) %in% drop)]
     for (j in 1:length(cat_range)){
       one_hot=cbind(one_hot,as.numeric(cat_var==cat_range[j]))
     }
@@ -57,31 +57,31 @@ for (i in 1:length(cat_varname)){
     for (j in 1:length(cat_range)){
       colnames(one_hot)[j]=paste0(drop,"_",cat_range[j])
     }
-    data=cbind(data,one_hot)
+    data_train=cbind(data_train,one_hot)
   }
 }
-write.csv(data,"trainset_impute_onehot.csv",row.names = F)
+write.csv(data_train,"trainset_impute_onehot.csv",row.names = F)
 
 ## real data - testset 
-data = read.csv("testset_impute50000.csv",header=T)
-cat_varname=c('ps_ind_02_cat','ps_ind_04_cat','ps_ind_05_cat','ps_ind_06_bin','ps_ind_07_bin',
+data_test = read.csv("testset_impute50000.csv",header=T)
+cat_varname_test=c('ps_ind_02_cat','ps_ind_04_cat','ps_ind_05_cat','ps_ind_06_bin','ps_ind_07_bin',
               'ps_ind_08_bin','ps_ind_09_bin','ps_ind_10_bin','ps_ind_11_bin','ps_ind_12_bin',
               'ps_ind_13_bin','ps_ind_16_bin','ps_ind_17_bin','ps_ind_18_bin','ps_car_01_cat',
               'ps_car_02_cat','ps_car_03_cat','ps_car_04_cat','ps_car_05_cat','ps_car_06_cat',
               'ps_car_07_cat','ps_car_08_cat','ps_car_09_cat','ps_car_10_cat','ps_car_11_cat',
               'ps_calc_15_bin','ps_calc_16_bin','ps_calc_17_bin','ps_calc_18_bin','ps_calc_19_bin',
               'ps_calc_20_bin')
-for (i in 1:length(cat_varname)){
+for (i in 1:length(cat_varname_test)){
   one_hot=c()
-  drop = cat_varname[i]
-  cat_var=data[,drop]
+  drop = cat_varname_test[i]
+  cat_var=data_test[,drop]
   cat_range=unique(cat_var)
   if (length(cat_range)==2){
-    data[cat_var==cat_range[1],drop]=1
-    data[cat_var==cat_range[2],drop]=-1
+    data_test[cat_var==cat_range[1],drop]=1
+    data_test[cat_var==cat_range[2],drop]=-1
   }
   else{
-    data=data[,!(names(data) %in% drop)]
+    data_test=data_test[,!(names(data_test) %in% drop)]
     for (j in 1:length(cat_range)){
       one_hot=cbind(one_hot,as.numeric(cat_var==cat_range[j]))
     }
@@ -89,11 +89,11 @@ for (i in 1:length(cat_varname)){
     for (j in 1:length(cat_range)){
       colnames(one_hot)[j]=paste0(drop,"_",cat_range[j])
     }
-    data=cbind(data,one_hot)
+    data_test=cbind(data_test,one_hot)
   }
 }
-colnames(data)[1]='id'
-write.csv(data,"testset_impute_onehot.csv",row.names = F)
+colnames(data_test)[1]='id'
+write.csv(data_test,"testset_impute_onehot.csv",row.names = F)
 
 ############################################################
 train = read.csv("trainset_impute_onehot.csv",header=T)
@@ -146,14 +146,14 @@ cont_name = c("ps_ind_01","ps_ind_03","ps_ind_14","ps_ind_15","ps_reg_01","ps_re
 train_scaled[,cont_name]=scale(train_scaled[,cont_name])
 
 
-write.csv(train_scaled,"trainset_1208.csv",row.names = F)
+write.csv(train_scaled,"../2_Cleaned/trainset_1208.csv",row.names = F)
 
 
 ############################################################
 test = read.csv("testset_impute_onehot.csv",header=T)
 ############################################################
 ### Add count of missing values
-raw_data_test = read.csv("test.csv",header=T)
+raw_data_test = read.csv("../0_Raw/test.csv",header=T)
 test = test[order(test$id),]
 raw_data_test = raw_data_test[order(raw_data_test$id),]
 test$na_count <- apply(raw_data_test, 1, function(x) sum(is.na(x)))
@@ -199,4 +199,4 @@ for (i in cont_name){ # Split up for RAM limitations
   test_scaled[,i] = scale(test_scaled[,i])
 }
 
-write.csv(test_scaled,"testset_1208.csv",row.names = F)
+write.csv(test_scaled,"../2_Cleaned/testset_1208.csv",row.names = F)
