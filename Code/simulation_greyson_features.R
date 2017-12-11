@@ -31,7 +31,7 @@ X=cbind(x1,x2,x3,x4_hot,inter1,inter2,x5,x6_hot)
 beta=c(0.1,-0.1,0.1,-0.1,0.1,-0.1,0.1,2,0.5,1,1.5,2)
 eta=-0.5+X[,1:12]%*%beta+rnorm(N,mean=0,sd=1)
 p=exp(eta)/(1+exp(eta))
-mean(p)
+mean(p) #0.43
 Y=as.numeric(p>0.5)
 
 ## Create additional covariates
@@ -82,9 +82,9 @@ beta1=c(0.1,-0.1,0.1,-0.1,0.1,-0.1,0.1,2,0.5,1,1.5,2)
 
 X2=cbind(x1,x2,x3,x4_hot,inter1,inter2,x1divx2,x3sq,complex,x5,x6_hot)
 beta2=c(0.02,-0.01,0.02,-0.015,0.01,-0.02,0.01,0.2,0.05,0.1,0.15, 0.2,0.00001,0.2,0.00003)
-eta2=-0.5+(1+X1[,1:12]%*%beta1)*(1+X2[,1:15]%*%beta2)+rnorm(N,mean=0,sd=1) # X5 and X6_hot irrelevant
+eta2=-4.5+(1+X1[,1:12]%*%beta1)^2*(1+X2[,1:15]%*%beta2)+rnorm(N,mean=0,sd=1) # X5 and X6_hot irrelevant
 p2=exp(eta2)/(1+exp(eta2))
-mean(p2)
+mean(p2) #0.41
 Y2=as.numeric(p2>0.5)
 
 # Save
