@@ -1,0 +1,16 @@
+Lmod has detected the following error: The following module(s) are unknown:
+"Anaconda/2.1.0-fasrc01"
+
+Please check the spelling or version number. Also try "module spider ..."
+It is also possible your cache file is out-of-date; it may help to try:
+  $ module --ignore-cache load "Anaconda/2.1.0-fasrc01"
+
+Also make sure that all modulefiles written in TCL start with the string
+#%Module
+
+
+
+Traceback (most recent call last):
+  File "simulation.py", line 3, in <module>
+    import numpy as np
+ImportError: No module named numpy
